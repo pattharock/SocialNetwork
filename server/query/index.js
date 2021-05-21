@@ -28,8 +28,16 @@ app.post("/events", (req, res) => {
     posts[postId].comments.push({
       id,
       content,
-      status, 
+      status,
     });
+  }
+
+  if (type === "CommentModerated") {
+    const { id, content, postId, status } = req.body;
+    const post = posts[postId];
+    const comment = post.comments.find((comment) => comment.id === id);
+    comment.status = status;
+    comment.content = content;
   }
 
   res.send({});

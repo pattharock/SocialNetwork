@@ -40,7 +40,7 @@ app.post("/posts/:id/comments", async (req, res) => {
   res.status(201).send(comments); // new resource created
 });
 
-app.post("/events", (req, res) => {
+app.post("/events", async (req, res) => {
   console.log("Received Event");
   console.log(req.body);
   const { type, data } = req.body;
