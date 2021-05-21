@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("express");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
@@ -24,8 +24,9 @@ app.post("/events", (req, res) => {
   }
 
   if (type === "CommentCreated") {
-    const { id, content, postId, status } = req.body;
-    posts[postId].comments.push({
+    const { id, content, postId, status } = data;
+    const post = posts[postId];
+    post.comments.push({
       id,
       content,
       status,
@@ -33,7 +34,7 @@ app.post("/events", (req, res) => {
   }
 
   if (type === "CommentModerated") {
-    const { id, content, postId, status } = req.body;
+    const { id, content, postId, status } = data;
     const post = posts[postId];
     const comment = post.comments.find((comment) => comment.id === id);
     comment.status = status;
