@@ -3,10 +3,9 @@ const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
 const cors = require("cors");
 const axios = require("axios");
-const { readdirSync } = require("fs");
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 
 const posts = {};
@@ -24,20 +23,22 @@ app.post("/posts", async (req, res) => {
     title,
   };
 
-  await axios.post("http://localhostt:4005/events", {
-    type: "PostCreated",
-    data: {
-      id,
-      title,
-    },
-  });
+  await axios
+    .post("http://localhost:4005/events", {
+      type: "PostCreated",
+      data: {
+        id,
+        title,
+      },
+    })
+    .catch((err) => console.log(err));
 
   res.status(201).send(posts[id]); // 201 resource successfully added.
 });
 
 app.post("/events", (req, res) => {
   console.log("Received Event");
-  console.log(req.body.type);
+  console.log(req.body);
   res.send({});
 });
 

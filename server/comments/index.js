@@ -5,7 +5,7 @@ const cors = require("cors");
 const axios = require("axios");
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 
 const commentsByPostId = {};
@@ -25,21 +25,23 @@ app.post("/posts/:id/comments", async (req, res) => {
 
   commentsByPostId[postId] = comments;
 
-  await axios.post("http://localhostt:4005/events", {
-    type: "CommentCreated",
-    data: {
-      id: commentId,
-      content,
-      postId,
-    },
-  });
+  await axios
+    .post("http://localhost:4005/events", {
+      type: "CommentCreated",
+      data: {
+        id: commentId,
+        content,
+        postId,
+      },
+    })
+    .catch((err) => console.log(err));
 
   res.status(201).send(comments); // new resource created
 });
 
 app.post("/events", (req, res) => {
   console.log("Received Event");
-  console.log(req.body.type);
+  console.log(req.body);
   res.send({});
 });
 
