@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
 const cors = require("cors");
 const axios = require("axios");
+const { readdirSync } = require("fs");
 
 const app = express();
 app.use(bodyParser.json());
@@ -32,6 +33,12 @@ app.post("/posts", (req, res) => {
   });
 
   res.status(201).send(posts[id]); // 201 resource successfully added.
+});
+
+app.post("/events", (req, res) => {
+  console.log("Received Event");
+  console.log(req.body.type);
+  res.send({});
 });
 
 app.listen(4000, () => {
